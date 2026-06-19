@@ -49,13 +49,25 @@ try:
     st.dataframe(df, use_container_width=True)
     
     # Check if expected columns exist before trying to plot
-    # Update these column names if they are different in your actual CSV!
-    if 'churn_risk_segment' in df.columns and 'idle_capital' in df.columns:
-        st.subheader("Capital at Risk by Segment")
-        fig = px.bar(df, x='churn_risk_segment', y='idle_capital', color='churn_risk_segment')
+    # Update these column names if they are different in your actual CSV
+    if 'days_since_last_use' in df.columns and 'total_stored_value' in df.columns:
+        st.subheader("Stagnation vs. Stored Value Matrix")
+        
+        # Creates a scatter plot to identify high-risk users
+        fig = px.scatter(
+            df, 
+            x='days_since_last_use', 
+            y='total_stored_value', 
+            hover_data=['user_id'],
+            color='days_since_last_use',
+            labels={
+                'days_since_last_use': 'Days Since Last Interaction', 
+                'total_stored_value': 'Idle Capital (Stored Value)'
+            }
+        )
         st.plotly_chart(fig, use_container_width=True)
     else:
-        st.info("💡 Data loaded, but chart columns ('churn_risk_segment', 'idle_capital') were not found in the CSV. Adjust the column names in app.py to match your data to see the chart.")
+        st.info("💡 Data loaded, but chart columns were not found. Check exact column names.")
 
 except FileNotFoundError:
     st.error("🚨 Error: Could not find 'final_segmentation.csv'. Please ensure it is uploaded to the GitHub repository.")
