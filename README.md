@@ -62,4 +62,4 @@ Spin up the interactive front-end:
 Bash
 python -m streamlit run app.py
 📺 Dashboard Preview & Demo
-[Insert link to your 1-minute video demo here]
+https://lifecycle-stagnation-analysis-bagvbup7bl2rz9upkwjxcp.streamlit.app/
