@@ -48,24 +48,42 @@ try:
     st.subheader("High-Risk User Roster (Preview)")
     st.dataframe(df, use_container_width=True)
     
-    # Check if expected columns exist before trying to plot
-    # Update these column names if they are different in your actual CSV
-    if 'days_since_last_use' in df.columns and 'total_stored_value' in df.columns:
-        st.subheader("Stagnation vs. Stored Value Matrix")
+    # --- VISUALIZATION SECTION ---
+    # Now checking for the 'status' column to color-code the charts!
+    if 'status' in df.columns and 'days_since_last_use' in df.columns and 'total_stored_value' in df.columns:
         
-        # Creates a scatter plot to identify high-risk users
-        fig = px.scatter(
-            df, 
-            x='days_since_last_use', 
-            y='total_stored_value', 
-            hover_data=['user_id'],
-            color='days_since_last_use',
-            labels={
-                'days_since_last_use': 'Days Since Last Interaction', 
-                'total_stored_value': 'Idle Capital (Stored Value)'
-            }
-        )
-        st.plotly_chart(fig, use_container_width=True)
+        st.divider() # Adds a clean visual break line
+        
+        # This creates two columns so the charts sit side-by-side
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            # CHART 1: Donut Chart showing segment breakdown
+            fig1 = px.pie(
+                df, 
+                names='status', 
+                title='User Segment Breakdown',
+                hole=0.4, # Makes it a donut instead of a flat pie chart
+                color='status'
+            )
+            st.plotly_chart(fig1, use_container_width=True)
+
+        with col2:
+            # CHART 2: Scatter Matrix colored by Risk Status
+            fig2 = px.scatter(
+                df, 
+                x='days_since_last_use', 
+                y='total_stored_value', 
+                color='status', # This highlights your high-risk users in a different color!
+                hover_data=['user_id'],
+                title='Stagnation vs. Idle Capital Matrix',
+                labels={
+                    'days_since_last_use': 'Days Inactive', 
+                    'total_stored_value': 'Stored Value'
+                }
+            )
+            st.plotly_chart(fig2, use_container_width=True)
+            
     else:
         st.info("💡 Data loaded, but chart columns were not found. Check exact column names.")
 
