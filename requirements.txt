@@ -1,6 +1,6 @@
-pandas==2.2.0
+pandas
 mysql-connector-python
-SQLAlchemy==2.0.25
-python-dotenv==1.0.1
+SQLAlchemy
+python-dotenv
 streamlit
 plotly
